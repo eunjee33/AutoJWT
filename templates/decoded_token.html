@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Decoded Token</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 1600px;
+            width: 100%;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .text {
+            white-space: pre-wrap; /* 줄바꿈을 유지하면서 공백 유지 */
+            overflow-wrap: break-word; /* 긴 단어가 줄바꿈 없이 한 줄에 모두 표시되지 않도록 설정 */
+        }
+        .btn {
+            height: calc(3em + 1rem + 2px);
+            font-size: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        pre {
+            border: 2px solid #dddddd; /* 테두리 스타일 설정 */
+            padding: 10px; /* 내부 패딩 설정 */
+            border-radius: 5px; /* 테두리의 모서리를 둥글게 만듭니다. */
+            height: 100%;
+        }
+	    .logo-container {
+            text-align: center;
+
+        }
+    </style>
+</head>
+<body>
+	<div class="wrapper">
+    <div class="logo-container">
+        <a href="/">
+		    <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="Logo Image" class="img-fluid" style="max-width: 300px;">
+        </a>
+	</div>    
+    <div class="container">
+        <h1 class="text-center">Decoded Token</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="section-title">Origin Token</h2>
+                <div class="form-group">
+                    <label for="origin-header">Origin Header:</label>
+                    <pre class="text" id="origin-header">{{ header }}</pre>
+                </div>
+                <div class="form-group">
+                    <label for="origin-payload">Origin Payload:</label>
+                    <pre class="text" id="origin-payload">{{ payload }}</pre>
+                </div>
+                <div class="form-group">
+                    <label for="origin-signature">Origin Signature:</label>
+                    <pre class="text" id="origin-signature">{{ signature }}</pre>
+                </div>
+                <div class="form-group">
+                    <label for="origin-token">Origin Token:</label>
+                    <pre class="text" id="origin-token">{{ token }}</pre>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2 class="section-title">Modified Token</h2>
+                <form action="/exploit" method="post">
+                    <div class="form-group">
+                        <label for="header">Modified Header:</label>
+                        <textarea class="form-control" id="header" name="header">{{ header }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="payload">Modified Payload:</label>
+                        <textarea class="form-control" id="payload" name="payload">{{ payload }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="signature">Modified Key:</label>
+                        <textarea class="form-control" id="key" name="key"></textarea>
+                    </div>
+                    <input type="hidden" id="signature" name="signature" value="{{ signature }}"/>
+                    <button type="submit" class="btn btn-success btn-block">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

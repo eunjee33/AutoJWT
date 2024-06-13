@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Input Token</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .wrapper{
+            margin: -100px auto 0 auto;
+            width: 800px;
+
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+	   
+        }
+	    .logo-container {
+            text-align: center;
+
+        }
+        textarea {
+            height: 300px;
+            font-size: 1.5rem;
+            resize: vertical;
+        }
+        .btn {
+            height: calc(3em + 1rem + 2px);
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+	<div class="wrapper">
+	<div class="logo-container">
+        <a href="/">
+		    <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="Logo Image" class="img-fluid" style="max-width: 300px;">
+        </a>
+	</div>    
+    <div class="container">
+        <h1 class="text-center">Enter a Token</h1>
+        <form action="/decoded" method="post">
+            <div class="form-group">
+                <label for="token1">Token1:</label>
+                <textarea class="form-control" id="token1" name="token1"></textarea>
+				<label for="token2">Token2:(for Exploit5-Algorithm Confusion)</label>
+                <textarea class="form-control" id="token2" name="token2"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
+    </div>
+	</div>
+</body>
+</html>

