@@ -107,7 +107,7 @@ def exploit5():
         ex5_tokens1, ex5_tokens2 = result
         ex5_decoded = []
 
-        for token in ex5_tokens2:
+        for token in (ex5_tokens1 + ex5_tokens2):
             ex5_decoded.append(autojwt.decode_str(token))
         
         return jsonify({"result": 1, "ex5_tokens1": ex5_tokens1, "ex5_tokens2": ex5_tokens2, "ex5_decoded": ex5_decoded})
